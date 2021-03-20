@@ -26,13 +26,17 @@ class FirebaseImageObject {
     };
   }
 
-  factory FirebaseImageObject.fromMap(Map<String, dynamic> map) {
-    return FirebaseImageObject(
-      version: map["version"] ?? -1,
-      reference: map["reference"],
-      localPath: map["localPath"],
-      bucket: map["bucket"],
-      remotePath: map["remotePath"],
-    );
+  factory FirebaseImageObject.fromMap(Map<String, dynamic>? map) {
+    if (map != null) {
+      return FirebaseImageObject(
+        version: map["version"] ?? -1,
+        reference: map["reference"],
+        localPath: map["localPath"],
+        bucket: map["bucket"],
+        remotePath: map["remotePath"],
+      );
+    } else {
+      throw ArgumentError('Unexpected type for data');
+    }
   }
 }
