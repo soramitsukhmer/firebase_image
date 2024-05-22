@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -100,8 +99,9 @@ class FirebaseImage extends ImageProvider<FirebaseImage> {
   }
 
   Future<Codec> _fetchImageCodec() async {
+    final buffer = await ImmutableBuffer.fromUint8List(await _fetchImage());
     return await PaintingBinding.instance
-        .instantiateImageCodec(await _fetchImage());
+        .instantiateImageCodecWithSize(buffer);
   }
 
   @override
@@ -110,7 +110,7 @@ class FirebaseImage extends ImageProvider<FirebaseImage> {
   }
 
   @override
-  ImageStreamCompleter load(FirebaseImage key, DecoderCallback decode) {
+  ImageStreamCompleter loadImage(FirebaseImage key, ImageDecoderCallback decode) {
     return MultiFrameImageStreamCompleter(
       codec: key._fetchImageCodec(),
       scale: key.scale,
@@ -118,15 +118,15 @@ class FirebaseImage extends ImageProvider<FirebaseImage> {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator == (Object other) {
     if (other.runtimeType != runtimeType) return false;
-    final FirebaseImage typedOther = other;
+    final FirebaseImage typedOther = other as FirebaseImage;
     return _imageObject.uri == typedOther._imageObject.uri &&
         this.scale == typedOther.scale;
   }
 
   @override
-  int get hashCode => hashValues(_imageObject.uri, this.scale);
+  int get hashCode => Object.hash(_imageObject.uri, this.scale);
 
   @override
   String toString() =>

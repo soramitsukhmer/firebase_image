@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:firebase_image/src/cache_manager/abstract.dart';
-import 'package:firebase_image/src/firebase_image.dart';
 import 'package:firebase_image/src/image_object.dart';
 import 'package:firebase_image/src/utils/map_utils.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -75,8 +73,9 @@ class FirebaseImageCacheManager extends AbstractFirebaseImageCacheManager {
         return bytes;
       }
     } catch (e) {
-      return null;
+      print("error $e");
     }
+    return null;
   }
 
   Future<Uint8List?> upsertRemoteFileToCache(
